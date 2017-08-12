@@ -10,6 +10,8 @@ from django.contrib.auth import (
 from django.shortcuts import render, redirect
 
 from .forms import UserLoginForm, UserRegisterForm
+
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def login_view(request):
     title = "Login"
@@ -49,5 +51,8 @@ def register_view(request):
     }
     return render(request, "accounts/form.html", context)
 
+@login_required(login_url='/login/')
 def home_view(request):
+	if request.user.is_authenticated():
+		print dir(request.user)
 	return render(request, "app/index.html")

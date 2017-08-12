@@ -9,7 +9,7 @@ from django.contrib.auth import (
 
 from django.shortcuts import render
 
-from .forms import UserLoginForm
+from .forms import UserLoginForm, UserRegisterForm
 # Create your views here.
 def login_view(request):
     title = "Login"
@@ -23,9 +23,24 @@ def login_view(request):
         #since the user has been authenticated, we can redirect him to the right page
     return render(request, "accounts/form.html", {"form":form, "title":title})
 
-def register_view(request):
-    return render(request, "accounts/form.html", {})
-
 def logout_view(request):
     logout(request) #this logs out a user
-    return render(request, "form.html", {})
+    return render(request, "accounts/form.html", {})
+
+def register_view(request):
+    title = "Register"
+    form = UserRegisterForm(request.POST or None)
+    if form.is_valid():
+    	user = form.save(commit=False)
+    	password = form.cleaned_data.get('password')
+    	user.set_password(password)
+    	user.save()
+
+    	new_user = authenticate(username=user.username, password=password)
+    	login(request, user)
+
+    context = {
+    "form": form,
+    "title": title
+    }
+    return render(request, "accounts/form.html", context)

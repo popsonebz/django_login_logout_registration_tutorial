@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Home</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %} Home {% endblock %}
+{% block content %}
+
+
     <h1>Welcome home</h1>
     {% if request.user.is_authenticated %}
     <h2>I {{ request.user.username }}, with email address {{request.user.email}} am authenticated</h2>
     {% endif %}
-</body>
-</html>
+
+{% endblock content %}

@@ -9,4 +9,8 @@
     <h2>I {{ request.user.username }}, with email address {{request.user.email}} am authenticated</h2>
     {% endif %}
 
+    <h2>Language is: {{language}}</h2>
+
+    <h2>Session Language is: {{session_language}}</h2>
+
 {% endblock content %}

@@ -12,6 +12,8 @@ from django.shortcuts import render, redirect
 from .forms import UserLoginForm, UserRegisterForm
 
 from django.contrib.auth.decorators import login_required
+
+from django.http import HttpResponse
 # Create your views here.
 def login_view(request):
     title = "Login"
@@ -55,4 +57,19 @@ def register_view(request):
 def home_view(request):
 	if request.user.is_authenticated():
 		print dir(request.user)
-	return render(request, "app/index.html")
+
+	language = 'en-gb' #store the language type for cookie
+	session_language = 'en-gb' #store the language type for session
+	if 'lang' in request.COOKIES:
+		language = request.COOKIES['lang']
+
+	if 'lang' in request.session:
+		language = request.session['lang']
+	return render(request, "app/index.html", {"language": language, "session_language": session_language})
+
+def language(request, language='en-gb'):
+	response = HttpResponse("setting language to %s" % language)
+	response.set_cookie('lang', language)
+
+	request.session['lang'] = language
+	return response
